@@ -1,126 +1,46 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Pagination from './Pagination';
-import Modal from './Modal';
-import { eventsAPI } from '../services/dataService';
-
-const eventsData = [
-  {
-    "id": 1,
-    "title": "Islamic Conference 2026",
-    "date": "2026-02-10",
-    "time": "10:00 AM",
-    "location": "Dhaka Convention Center",
-    "description": "Annual Islamic conference bringing together scholars and leaders",
-    "content": "Join us for our annual Islamic conference where we discuss contemporary issues facing Muslim communities worldwide. Expert speakers will share insights on education, technology, and social welfare.",
-    "image": "/assets/event-01.jpg",
-    "featured": true,
-    "enabled": true,
-    "status": "upcoming",
-    "priority": "low",
-    "capacity": 500,
-    "registered": 234,
-    "category": "conference"
-  },
-  {
-    "id": 2,
-    "title": "Youth Workshop Series",
-    "date": "2026-01-25",
-    "time": "2:00 PM",
-    "location": "ATR Innovation Hub",
-    "description": "Interactive workshop for young professionals on technology and entrepreneurship",
-    "content": "Learn cutting-edge skills in web development, digital marketing, and business management from industry experts.",
-    "image": "/assets/event-02.jpg",
-    "featured": true,
-    "enabled": true,
-    "status": "upcoming",
-    "priority": "mid",
-    "capacity": 100,
-    "registered": 87,
-    "category": "workshop"
-  },
-  {
-    "id": 3,
-    "title": "Community Service Day",
-    "date": "2026-03-15",
-    "time": "8:00 AM",
-    "location": "Multiple Locations",
-    "description": "Join us in giving back to our community through volunteer work",
-    "content": "Together we make a difference. Participate in various community service activities including education support, environmental cleanup, and healthcare awareness.",
-    "image": "/assets/event-03.jpg",
-    "featured": false,
-    "enabled": true,
-    "status": "ongoing",
-    "priority": "mid",
-    "capacity": 200,
-    "registered": 145,
-    "category": "volunteer"
-  },
-  {
-  "id": 4,
-  "title": "Bangladesh Halal Expo - 2026",
-  "date": "2026-02-07",
-  "time": "6:00 PM",
-  "location": "China Bangladesh Friendship Conference Center",
-  "description": "Bangladesh Halal Expo 2026 stands as a trusted meeting point of the global halal economy, bringing together international exhibitors, buyers, innovators, and policymakers on one prestigious platform. Guided by the principles of halal, ethical trade, and sustainability, the Expo reflects a shared vision of inclusive growth and responsible commerce.",
-  "content": "Bangladesh Halal Expo 2026 stands as a trusted meeting point of the global halal economy, bringing together international exhibitors, buyers, innovators, and policymakers on one prestigious platform. Guided by the principles of halal, ethical trade, and sustainability, the Expo reflects a shared vision of inclusive growth and responsible commerce.<br/><div class='card about-highlights-card'><h4 style='color: var(--primary-green); margin-bottom: 15px; font-size: 1.4rem;'>2026 Highlights</h4><ul style='list-style: none'><li style='margin-bottom: 15px; display: flex; align-items: center'><span style='color: var(--gold); margin-right: 10px; font-size: 1.2rem;'>✓</span>15,000+ sqm International Exhibition Area</li><li style='margin-bottom: 15px; display: flex; align-items: center'><span style='color: var(--gold); margin-right: 10px; font-size: 1.2rem;'>✓</span>Participation from 40+ Countries</li><li style='margin-bottom: 15px; display: flex; align-items: center'><span style='color: var(--gold); margin-right: 10px; font-size: 1.2rem;'>✓</span>700+ Hosted International Buyers</li><li style='margin-bottom: 15px; display: flex; align-items: center'><span style='color: var(--gold); margin-right: 10px; font-size: 1.2rem;'>✓</span>Organized in collaboration with OIC-affiliated Institutions</li><li style='margin-bottom: 15px; display: flex; align-items: center'><span style='color: var(--gold); margin-right: 10px; font-size: 1.2rem;'>✓</span>Specialized Zones: NOV, Private Label &amp; SEFPEX</li><li style='margin-bottom: 15px; display: flex; align-items: center'><span style='color: var(--gold); margin-right: 10px; font-size: 1.2rem;'>✓</span>Platform for Global B2B Meetings &amp; Halal Trade Forums</li></ul></div>",
-  "image": "/assets/halal_expo.png",
-  "featured": false,
-  "enabled": true,
-  "status": "upcoming",
-  "priority": "high",
-  "capacity": 150,
-  "registered": 98,
-  "category": "networking"
-  },
-  {
-    "id": 5,
-    "title": "Islamic Conference 2026",
-    "date": "2026-02-10",
-    "time": "10:00 AM",
-    "location": "Dhaka Convention Center",
-    "description": "Annual Islamic conference bringing together scholars and leaders",
-    "content": "Join us for our annual Islamic conference where we discuss contemporary issues facing Muslim communities worldwide. Expert speakers will share insights on education, technology, and social welfare.",
-    "image": "/assets/event-01.jpg",
-    "featured": true,
-    "enabled": true,
-    "status": "upcoming",
-    "priority": "low",
-    "capacity": 500,
-    "registered": 234,
-    "category": "conference"
-  }
-];
 
 export default function EventsPage({ onOpenModal = () => {} }) {
   const [currentPage, setCurrentPage] = useState(1);
   const [filterStatus, setFilterStatus] = useState('all');
-  // const [loading, setLoading] = useState(false);
-  // const [eventsData, setEventsData] = useState([]);
+  const [eventsData, setEventsData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [pdfModal, setPdfModal] = useState({ isOpen: false, pdfUrl: null, title: null });
   const itemsPerPage = 6;
+
+  const openPdfModal = (pdfUrl, title) => {
+    setPdfModal({ isOpen: true, pdfUrl, title });
+  };
+
+  const closePdfModal = () => {
+    setPdfModal({ isOpen: false, pdfUrl: null, title: null });
+  };
 
   const filteredEvents =
     filterStatus === 'all'
       ? eventsData
       : eventsData.filter((event) => event.status === filterStatus);
   
-  //   const loadLatestEvent = async () => {
-  //       try {
-  //         const allEvents = await eventsAPI.getAllEvents();
-  //         const enabledEvents = allEvents.filter(e => e.enabled === true);
-          
-  //         if (enabledEvents.length > 0) {
-  //           setEventsData(enabledEvents);
-  //         }
-  //       } catch (err) {
-  //         console.error('Error loading latest event:', err);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-    
-  // useEffect(() => {
-  //   loadLatestEvent();
-  // }, []);
+  const loadEvents = async () => {
+    try {
+      const response = await fetch('/data/events.json');
+      if (!response.ok) {
+        throw new Error('Failed to fetch events data');
+      }
+      const data = await response.json();
+      const enabledEvents = data.filter(event => event.enabled === true);
+      setEventsData(enabledEvents);
+    } catch (err) {
+      console.error('Error loading events:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadEvents();
+  }, []);
 
   const startIdx = (currentPage - 1) * itemsPerPage;
   const paginatedEvents = filteredEvents.slice(
@@ -133,16 +53,16 @@ export default function EventsPage({ onOpenModal = () => {} }) {
     setCurrentPage(1);
   };
 
-  // if (loading || !eventsData) {
-  //   return (
-  //     <section className="container mx-auto px-4 py-24 max-w-6xl">
-  //       <div className="text-center">
-  //         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary mx-auto mb-4"></div>
-  //         <p className="text-gray-600">Loading latest event...</p>
-  //       </div>
-  //     </section>
-  //   );
-  // }
+  if (loading || !eventsData) {
+    return (
+      <section className="container mx-auto px-4 py-24 max-w-6xl">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-primary mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading events...</p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="min-h-screen">
@@ -213,6 +133,17 @@ export default function EventsPage({ onOpenModal = () => {} }) {
                   <p className="text-gray-600 text-sm mb-4 line-clamp-2 flex-grow">
                     {event.summary}
                   </p>
+                  {event.pdf && (
+                    <button
+                      onClick={() => openPdfModal(event.pdf, event.title)}
+                      className="inline-flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg font-semibold hover:bg-primary-dark transition-colors text-sm mb-3"
+                    >
+                      <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                      </svg>
+                      View PDF
+                    </button>
+                  )}
                   <button
                     onClick={() => onOpenModal('event', event)}
                     className="text-primary font-bold text-sm hover:text-gold transition-colors text-left"
@@ -241,6 +172,56 @@ export default function EventsPage({ onOpenModal = () => {} }) {
           </div>
         )}
       </div>
+
+      {/* PDF Modal */}
+      {pdfModal.isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={closePdfModal} />
+          <div className="bg-white rounded-2xl w-full max-w-4xl max-h-[90vh] overflow-hidden relative z-10 shadow-2xl">
+            <div className="flex items-center justify-between p-6 border-b border-gray-200">
+              <h3 className="text-xl font-bold text-primary">{pdfModal.title} - PDF Document</h3>
+              <button
+                onClick={closePdfModal}
+                className="w-10 h-10 rounded-full flex items-center justify-center hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+            <div className="p-6">
+              <div className="flex gap-4 mb-4">
+                <a
+                  href={pdfModal.pdfUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-primary-dark transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z" />
+                  </svg>
+                  Open in New Tab
+                </a>
+                <a
+                  href={pdfModal.pdfUrl}
+                  download
+                  className="inline-flex items-center gap-2 bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors"
+                >
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M5,20H19V18H5M19,9H15V3H9V9H5L12,16L19,9Z" />
+                  </svg>
+                  Download PDF
+                </a>
+              </div>
+              <div className="border border-gray-200 rounded-lg overflow-hidden">
+                <iframe
+                  src={pdfModal.pdfUrl}
+                  className="w-full h-[600px]"
+                  title={`${pdfModal.title} PDF`}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

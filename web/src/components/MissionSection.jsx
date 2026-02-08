@@ -1,9 +1,6 @@
 const MissionSection = () => {
   return (
-    <section
-      id="mission-section"
-      className="bg-sky-light py-20 scroll-mt-24"
-    >
+    <section id="mission-section" className="bg-sky-light py-20 scroll-mt-24">
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Header */}
         <div className="text-center mb-16">
@@ -17,34 +14,6 @@ const MissionSection = () => {
 
         {/* Cards */}
         <div className="grid md:grid-cols-2 gap-12">
-          {/* Mission */}
-          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex flex-row mb-4">
-                <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mb-6">
-                    <svg
-                        className="w-6 h-6 text-primary-dark"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                    >
-                        <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M13 10V3L4 14h7v7l9-11h-7z"
-                        />
-                    </svg>
-                </div>
-
-                <h3 className="text-2xl font-bold text-primary mb-4 p-2">
-                Our Mission
-                </h3>
-            </div>
-            <p className="text-gray-600 leading-relaxed">
-              To foster global unity within the Muslim Ummah by resolving internal conflicts and promoting dialogue, empathy, and mutual understanding.
-            </p>
-          </div>
-
           {/* Vision */}
           <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
             <div className="flex flex-row mb-4">
@@ -75,7 +44,35 @@ const MissionSection = () => {
                 </h3>
             </div>
             <p className="text-gray-600 leading-relaxed">
-              To establish a resilient, empowered, and influential global Muslim community that contributes positively to the world.
+              To work with world humanity to stop interethnic and interrelations conflicts and work against terrorism, war, aggression, violation, Mass produce weapons. To work for to establish a new world without drugs, war, alcohol, homosexuality, destruction of the institute of family, mass hunger. To organize world peace march to stop above cause and work for to establish a new world peace organization.
+            </p>
+          </div>
+
+          {/* Mission */}
+          <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+            <div className="flex flex-row mb-4">
+                <div className="w-12 h-12 bg-gold/20 rounded-full flex items-center justify-center mb-6">
+                    <svg
+                        className="w-6 h-6 text-primary-dark"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 10V3L4 14h7v7l9-11h-7z"
+                        />
+                    </svg>
+                </div>
+
+                <h3 className="text-2xl font-bold text-primary mb-4 p-2">
+                Our Mission
+                </h3>
+            </div>
+            <p className="text-gray-600 leading-relaxed">
+               To free and salvage the world humanity from all evil, to be united all the Muslims and Non-Muslim. Our main objective is to establish unity, solidarity and brotherhood among the muslims of the world. Our task is to keep peace and tranquillity to protect spiritual values and the unity, to establish peace, happiness and prosperity all over the Muslim and Non-Muslim territories of the world. Taking proper measures for realization of women's rights indicated in Islam. To Improving of public opinion against terrorism, war, aggression, violation, Mass produce weapons also against homosexuality, to save universal family system in the world.
             </p>
           </div>
         </div>

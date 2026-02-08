@@ -1,5 +1,4 @@
-import React from 'react';
-import { FiBarChart2, FiCalendar, FiImage, FiFileText, FiSettings, FiX } from 'react-icons/fi';
+import { FiBarChart2, FiCalendar, FiFileText, FiImage, FiSettings, FiX } from 'react-icons/fi';
 
 export default function DashboardNav({ activeTab, setActiveTab, setShowMobileNav }) {
   const navItems = [

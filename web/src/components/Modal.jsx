@@ -1,5 +1,3 @@
-import { useState } from 'react';
-
 export default function Modal({ isOpen, data, type, onClose }) {
   if (!isOpen || !data) return null;
 

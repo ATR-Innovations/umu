@@ -73,19 +73,6 @@ const STORAGE_KEYS = {
 // STATE TRACKING - Keep track of loaded state
 // ============================================================================
 
-let dataCache = {
-  events: null,
-  news: null,
-  gallery: null,
-  config: null,
-  loaded: {
-    events: false,
-    news: false,
-    gallery: false,
-    config: false,
-  }
-};
-
 // ============================================================================
 // UTILITY: FETCH FROM LOCAL JSON FILES USING AXIOS
 // ============================================================================
@@ -159,7 +146,7 @@ export const eventsAPI = {
       let events = await fetchFromJSON('/data/events.json');
       syncToLocalStorage(STORAGE_KEYS.EVENTS, events);
       return events;
-    } catch (error) {
+    } catch {
       console.warn('Fetching from server failed, using localStorage');
       const cached = loadFromLocalStorage(STORAGE_KEYS.EVENTS);
       return cached || [];
@@ -302,7 +289,7 @@ export const newsAPI = {
       let news = await fetchFromJSON('/data/news.json');
       syncToLocalStorage(STORAGE_KEYS.NEWS, news);
       return news;
-    } catch (error) {
+    } catch {
       console.warn('Fetching from server failed, using localStorage');
       const cached = loadFromLocalStorage(STORAGE_KEYS.NEWS);
       return cached || [];
@@ -444,7 +431,7 @@ export const galleryAPI = {
       let gallery = await fetchFromJSON('/data/gallery.json');
       syncToLocalStorage(STORAGE_KEYS.GALLERY, gallery);
       return gallery;
-    } catch (error) {
+    } catch {
       console.warn('Fetching from server failed, using localStorage');
       const cached = loadFromLocalStorage(STORAGE_KEYS.GALLERY);
       return cached || [];
@@ -576,7 +563,7 @@ export const configAPI = {
       let config = await fetchFromJSON('/data/config.json');
       syncToLocalStorage(STORAGE_KEYS.SITE_CONFIG, config);
       return config;
-    } catch (error) {
+    } catch {
       console.warn('Fetching config failed, using localStorage');
       return loadFromLocalStorage(STORAGE_KEYS.SITE_CONFIG) || {};
     }
@@ -656,20 +643,28 @@ export const authAPI = {
   },
 
   /**
-   * Login user (demo mode - accepts any credentials)
+   * Login user (admin-only access)
    */
   async login(email, password) {
     if (!email || !password) throw new Error('Email and password required');
     
+    // Check for specific admin credentials
+    const adminEmail = 'assadullaalgalib12@gmail.com';
+    const adminPassword = 'umuAdmin!@#';
+    
+    if (email !== adminEmail || password !== adminPassword) {
+      throw new Error('Invalid email or password');
+    }
+    
     const user = {
-      id: 'user_' + Date.now(),
+      id: 'admin_' + Date.now(),
       email,
-      name: email.split('@')[0],
+      name: 'Admin',
       role: 'admin',
       loginTime: new Date().toISOString(),
     };
 
-    const token = 'token_' + Date.now();
+    const token = 'admin_token_' + Date.now();
     
     localStorage.setItem('authToken', token);
     localStorage.setItem('currentUser', JSON.stringify(user));

@@ -1,12 +1,11 @@
-import { useRef, useState, useEffect } from "react";
-import { galleryAPI } from "../services/dataService";
+import { useEffect, useRef, useState } from "react";
 
 const galleryData = [
   {
     "id": 1,
-    "title": "Conference 2025",
-    "image": "/assets/gallery-01.jpg",
-    "thumbnail": "/assets/gallery-01-thumb.jpg",
+    "title": "",
+    "image": "assets/gallery-0142.jpg",
+    "thumbnail": "/assets/gallery-078-thumb.jpg",
     "description": "Highlights from our annual conference",
     "category": "events",
     "date": "2025-11-15",
@@ -17,9 +16,9 @@ const galleryData = [
   },
   {
     "id": 2,
-    "title": "Community Outreach Program",
-    "image": "/assets/gallery-02.jpg",
-    "thumbnail": "/assets/gallery-02-thumb.jpg",
+    "title": "",
+    "image": "/assets/saidi saheb.jpeg",
+    "thumbnail": "/assets/gallery-0142-thumb.jpg",
     "description": "Our team engaging with the community",
     "category": "community",
     "date": "2025-10-20",
@@ -30,7 +29,7 @@ const galleryData = [
   },
   {
     "id": 3,
-    "title": "Educational Workshop",
+    "title": "Anti-terrorism Program",
     "image": "/assets/gallery-03.jpg",
     "thumbnail": "/assets/gallery-03-thumb.jpg",
     "description": "Students learning in our workshop",
@@ -43,7 +42,7 @@ const galleryData = [
   },
   {
     "id": 4,
-    "title": "Team Building Event",
+    "title": "Al-AQSA grand Mufti receaptions",
     "image": "/assets/gallery-04.jpg",
     "thumbnail": "/assets/gallery-04-thumb.jpg",
     "description": "Our dedicated team at the annual gathering",
@@ -56,9 +55,9 @@ const galleryData = [
   },
   {
     "id": 5,
-    "title": "Charity Drive 2025",
-    "image": "/assets/gallery-05.jpg",
-    "thumbnail": "/assets/gallery-05-thumb.jpg",
+    "title": "Public Ceremony in Moscow",
+    "image": "/assets/gallery-081.jpg",
+    "thumbnail": "/assets/gallery-081-thumb.jpg",
     "description": "Annual charity drive supporting local causes",
     "category": "charity",
     "date": "2025-07-22",
@@ -69,7 +68,7 @@ const galleryData = [
   }
 ]
 
-function GalleryCarouselSection({ onNavigate = () => {} }) {
+function GalleryCarouselSection() {
   const carouselRef = useRef(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);

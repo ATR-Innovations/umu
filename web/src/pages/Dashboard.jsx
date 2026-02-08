@@ -13,7 +13,6 @@ export default function Dashboard() {
   const [events, setEvents] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [news, setNews] = useState([]);
-  const [aboutContent, setAboutContent] = useState(null);
   const [showMobileNav, setShowMobileNav] = useState(false);
   const [actionLoading, setActionLoading] = useState(false);
   const [actionMessage, setActionMessage] = useState(null);
@@ -22,11 +21,14 @@ export default function Dashboard() {
   const [eventForm, setEventForm] = useState({
     title: '', date: '', status: 'upcoming', location: '', summary: '', content: ''
   });
+  const [editingEvent, setEditingEvent] = useState(null);
   const [newsForm, setNewsForm] = useState({
     title: '', summary: '', content: '', author: ''
   });
-  const [aboutForm, setAboutForm] = useState({
-    whoWeAre: '', mission: '', vision: ''
+  const [editingNews, setEditingNews] = useState(null);
+  const [editingGallery, setEditingGallery] = useState(null);
+  const [galleryForm, setGalleryForm] = useState({
+    title: '', description: ''
   });
 
   // Fetch data on component mount
@@ -126,6 +128,58 @@ export default function Dashboard() {
     }
   };
 
+  const handleEditEvent = (event) => {
+    setEditingEvent(event);
+    setEventForm({
+      title: event.title,
+      date: event.date,
+      status: event.status,
+      location: event.location,
+      summary: event.summary,
+      content: event.content,
+    });
+  };
+
+  const handleUpdateEvent = async (e) => {
+    e.preventDefault();
+    if (!eventForm.title || !eventForm.date) {
+      setActionMessage({ type: 'error', text: 'Please fill in title and date' });
+      setTimeout(() => setActionMessage(null), 3000);
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      const updatedEvent = await eventsAPI.updateEvent(editingEvent.id, {
+        title: eventForm.title,
+        date: eventForm.date,
+        status: eventForm.status,
+        location: eventForm.location,
+        summary: eventForm.summary,
+        content: eventForm.content,
+      });
+
+      const updatedEvents = events.map(e => e.id === editingEvent.id ? updatedEvent : e);
+      setEvents(updatedEvents);
+      setEventForm({ title: '', date: '', status: 'upcoming', location: '', summary: '', content: '' });
+      setEditingEvent(null);
+      setActionMessage({ type: 'success', text: '✓ Event updated successfully!' });
+      setTimeout(() => setActionMessage(null), 3000);
+      console.log('Event updated:', updatedEvent);
+    } catch (error) {
+      console.error('Error updating event:', error);
+      setActionMessage({ type: 'error', text: 'Error updating event: ' + error.message });
+      setTimeout(() => setActionMessage(null), 3000);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingEvent(null);
+    setEventForm({ title: '', date: '', status: 'upcoming', location: '', summary: '', content: '' });
+  };
+
   // ==================== GALLERY HANDLERS ====================
   const handleUploadImage = async (e) => {
     e.preventDefault();
@@ -183,6 +237,50 @@ export default function Dashboard() {
     }
   };
 
+  const handleEditGallery = (item) => {
+    setEditingGallery(item);
+    setGalleryForm({
+      title: item.title,
+      description: item.description,
+    });
+  };
+
+  const handleUpdateGallery = async (e) => {
+    e.preventDefault();
+    if (!galleryForm.title) {
+      setActionMessage({ type: 'error', text: 'Please fill in title' });
+      setTimeout(() => setActionMessage(null), 3000);
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      const updatedItem = await galleryAPI.updateGalleryItem(editingGallery.id, {
+        title: galleryForm.title,
+        description: galleryForm.description,
+      });
+
+      const updatedGallery = gallery.map(g => g.id === editingGallery.id ? updatedItem : g);
+      setGallery(updatedGallery);
+      setGalleryForm({ title: '', description: '' });
+      setEditingGallery(null);
+      setActionMessage({ type: 'success', text: '✓ Gallery item updated successfully!' });
+      setTimeout(() => setActionMessage(null), 3000);
+      console.log('Gallery updated:', updatedItem);
+    } catch (error) {
+      console.error('Error updating gallery:', error);
+      setActionMessage({ type: 'error', text: 'Error updating gallery: ' + error.message });
+      setTimeout(() => setActionMessage(null), 3000);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCancelEditGallery = () => {
+    setEditingGallery(null);
+    setGalleryForm({ title: '', description: '' });
+  };
+
   // ==================== NEWS HANDLERS ====================
   const handleAddNews = async (e) => {
     e.preventDefault();
@@ -235,6 +333,54 @@ export default function Dashboard() {
         setActionLoading(false);
       }
     }
+  };
+
+  const handleEditNews = (article) => {
+    setEditingNews(article);
+    setNewsForm({
+      title: article.title,
+      summary: article.summary,
+      content: article.content,
+      author: article.author,
+    });
+  };
+
+  const handleUpdateNews = async (e) => {
+    e.preventDefault();
+    if (!newsForm.title || !newsForm.content) {
+      setActionMessage({ type: 'error', text: 'Please fill in title and content' });
+      setTimeout(() => setActionMessage(null), 3000);
+      return;
+    }
+
+    try {
+      setActionLoading(true);
+      const updatedNewsItem = await newsAPI.updateNews(editingNews.id, {
+        title: newsForm.title,
+        summary: newsForm.summary,
+        content: newsForm.content,
+        author: newsForm.author,
+      });
+
+      const updatedNewsList = news.map(n => n.id === editingNews.id ? updatedNewsItem : n);
+      setNews(updatedNewsList);
+      setNewsForm({ title: '', summary: '', content: '', author: '' });
+      setEditingNews(null);
+      setActionMessage({ type: 'success', text: '✓ News article updated successfully!' });
+      setTimeout(() => setActionMessage(null), 3000);
+      console.log('News updated:', updatedNewsItem);
+    } catch (error) {
+      console.error('Error updating news:', error);
+      setActionMessage({ type: 'error', text: 'Error updating news: ' + error.message });
+      setTimeout(() => setActionMessage(null), 3000);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const handleCancelEditNews = () => {
+    setEditingNews(null);
+    setNewsForm({ title: '', summary: '', content: '', author: '' });
   };
 
   if (loading) {
@@ -350,10 +496,12 @@ export default function Dashboard() {
           {/* ===== EVENTS TAB ===== */}
           {activeTab === 'events' && (
             <div>
-              {/* Add Event Form */}
+              {/* Add/Edit Event Form */}
               <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-                <h2 className="text-2xl font-black text-primary mb-6">Add New Event</h2>
-                <form onSubmit={handleAddEvent} className="space-y-4">
+                <h2 className="text-2xl font-black text-primary mb-6">
+                  {editingEvent ? 'Edit Event' : 'Add New Event'}
+                </h2>
+                <form onSubmit={editingEvent ? handleUpdateEvent : handleAddEvent} className="space-y-4">
                   <div className="grid md:grid-cols-2 gap-4">
                     <input
                       type="text"
@@ -402,13 +550,24 @@ export default function Dashboard() {
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold outline-none resize-none"
                   />
 
-                  <button
-                    type="submit"
-                    disabled={actionLoading}
-                    className="bg-[#8D8325] bg-primary hover:bg-primary-dark disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition"
-                  >
-                    <FiPlus size={20} /> {actionLoading ? 'Adding...' : 'Add Event'}
-                  </button>
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={actionLoading}
+                      className="bg-[#8D8325] bg-primary hover:bg-primary-dark disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition"
+                    >
+                      <FiPlus size={20} /> {actionLoading ? (editingEvent ? 'Updating...' : 'Adding...') : (editingEvent ? 'Update Event' : 'Add Event')}
+                    </button>
+                    {editingEvent && (
+                      <button
+                        type="button"
+                        onClick={handleCancelEdit}
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-bold transition"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </form>
               </div>
 
@@ -427,6 +586,12 @@ export default function Dashboard() {
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full capitalize">{event.status}</span>
+                          <button
+                            onClick={() => handleEditEvent(event)}
+                            className="text-blue-600 hover:text-blue-800 p-2"
+                          >
+                            <FiEdit2 size={18} />
+                          </button>
                           <button
                             onClick={() => handleDeleteEvent(event.id)}
                             className="text-red-600 hover:text-red-800 p-2"
@@ -482,6 +647,47 @@ export default function Dashboard() {
                 </form>
               </div>
 
+              {/* Edit Form */}
+              {editingGallery && (
+                <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
+                  <h2 className="text-2xl font-black text-primary mb-6">Edit Gallery Item</h2>
+                  <form onSubmit={handleUpdateGallery} className="space-y-4">
+                    <input
+                      type="text"
+                      placeholder="Image Title *"
+                      value={galleryForm.title}
+                      onChange={(e) => setGalleryForm({ ...galleryForm, title: e.target.value })}
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold outline-none"
+                    />
+
+                    <textarea
+                      placeholder="Image Description"
+                      value={galleryForm.description}
+                      onChange={(e) => setGalleryForm({ ...galleryForm, description: e.target.value })}
+                      rows="3"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold outline-none resize-none"
+                    />
+
+                    <div className="flex gap-4">
+                      <button
+                        type="submit"
+                        disabled={actionLoading}
+                        className="bg-[#8D8325] bg-primary hover:bg-primary-dark disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition"
+                      >
+                        <FiEdit2 size={20} /> {actionLoading ? 'Updating...' : 'Update Item'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handleCancelEditGallery}
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-bold transition"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
+
               {/* Gallery Grid */}
               <div className="bg-white rounded-lg shadow-lg p-8">
                 <h3 className="text-xl font-black text-primary mb-6">Gallery Images ({gallery.length})</h3>
@@ -493,12 +699,20 @@ export default function Dashboard() {
                       <div key={item.id} className="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
                         <div className="h-48 bg-gray-200 relative">
                           <img src={item.image} alt={item.title} className="w-full h-full object-cover" onError={(e) => e.target.src = '/assets/placeholder.jpg'} />
-                          <button
-                            onClick={() => handleDeleteImage(item.id)}
-                            className="absolute top-2 right-2 bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition"
-                          >
-                            <FiTrash2 size={18} />
-                          </button>
+                          <div className="absolute top-2 right-2 flex gap-1">
+                            <button
+                              onClick={() => handleEditGallery(item)}
+                              className="bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition"
+                            >
+                              <FiEdit2 size={16} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteImage(item.id)}
+                              className="bg-red-600 text-white p-2 rounded-full hover:bg-red-700 transition"
+                            >
+                              <FiTrash2 size={16} />
+                            </button>
+                          </div>
                         </div>
                         <div className="p-4">
                           <h4 className="font-bold text-primary">{item.title}</h4>
@@ -515,10 +729,12 @@ export default function Dashboard() {
           {/* ===== NEWS TAB ===== */}
           {activeTab === 'news' && (
             <div>
-              {/* Add News Form */}
+              {/* Add/Edit News Form */}
               <div className="bg-white rounded-lg shadow-lg p-8 mb-8">
-                <h2 className="text-2xl font-black text-primary mb-6">Write News Article</h2>
-                <form onSubmit={handleAddNews} className="space-y-4">
+                <h2 className="text-2xl font-black text-primary mb-6">
+                  {editingNews ? 'Edit News Article' : 'Write News Article'}
+                </h2>
+                <form onSubmit={editingNews ? handleUpdateNews : handleAddNews} className="space-y-4">
                   <input
                     type="text"
                     placeholder="Article Title *"
@@ -551,13 +767,24 @@ export default function Dashboard() {
                     className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gold outline-none resize-none"
                   />
 
-                  <button
-                    type="submit"
-                    disabled={actionLoading}
-                    className="bg-[#8D8325] bg-primary hover:bg-primary-dark disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition"
-                  >
-                    <FiPlus size={20} /> {actionLoading ? 'Publishing...' : 'Publish Article'}
-                  </button>
+                  <div className="flex gap-4">
+                    <button
+                      type="submit"
+                      disabled={actionLoading}
+                      className="bg-[#8D8325] bg-primary hover:bg-primary-dark disabled:bg-gray-400 text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 transition"
+                    >
+                      <FiPlus size={20} /> {actionLoading ? (editingNews ? 'Updating...' : 'Publishing...') : (editingNews ? 'Update Article' : 'Publish Article')}
+                    </button>
+                    {editingNews && (
+                      <button
+                        type="button"
+                        onClick={handleCancelEditNews}
+                        className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-bold transition"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </form>
               </div>
 
@@ -574,12 +801,20 @@ export default function Dashboard() {
                           <h4 className="font-bold text-primary">{article.title}</h4>
                           <p className="text-sm text-gray-600">By {article.author || 'Unknown'} • {article.summary?.substring(0, 50)}</p>
                         </div>
-                        <button
-                          onClick={() => handleDeleteNews(article.id)}
-                          className="text-red-600 hover:text-red-800 p-2"
-                        >
-                          <FiTrash2 size={18} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => handleEditNews(article)}
+                            className="text-blue-600 hover:text-blue-800 p-2"
+                          >
+                            <FiEdit2 size={18} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteNews(article.id)}
+                            className="text-red-600 hover:text-red-800 p-2"
+                          >
+                            <FiTrash2 size={18} />
+                          </button>
+                        </div>
                       </div>
                     ))
                   )}

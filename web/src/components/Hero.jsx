@@ -27,14 +27,13 @@ const Hero = ({ onScroll }) => {
 
             <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight drop-shadow-sm">
               United Muslim Ummah
-              <span className="block text-gold text-2xl md:text-3xl mt-4 font-bold">
-                Global Islamic Community
+              <span className="block textred text-2xl md:text-3xl mt-4 font-bold">
+                We are working for the unity of the Ummah
               </span>
             </h1>
 
             <p className="text-lg md:text-xl font-medium text-gray-700 mb-10 max-w-2xl mx-auto opacity-90">
-              United for Peace, Progress &amp; Prosperity. Connecting hearts and
-              minds across the globe.
+              Our task is to keep peace and tranquillity to protect spiritual values and the unity of Ummah, to establish peace, happiness and prosperity all over the world. 
             </p>
 
             <div className="flex flex-col md:flex-row gap-4 justify-center mb-8">

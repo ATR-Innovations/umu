@@ -77,7 +77,7 @@ export default function Navbar() {
         {/* Mobile Hamburger */}
         <button
           id="hamburger"
-          className="md:hidden text-white text-2xl focus:outline-none"
+          className="md:hidden text-white text-2xl focus:outline-none p-2"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
         >
           ☰
@@ -86,7 +86,7 @@ export default function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       {mobileMenuOpen && (
-        <div className="nav-menu flex-col flex absolute top-20 left-0 w-full bg-primary border-t border-primary-dark shadow-xl md:hidden">
+        <div className="flex-col flex absolute top-20 left-0 w-full bg-primary border-t border-primary-dark shadow-xl md:hidden">
           {navLinks.map((link) => (
             <Link
               key={link.path}
