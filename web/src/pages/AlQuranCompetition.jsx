@@ -341,11 +341,96 @@ const RULES = [
 ];
 
 const ORGANIZERS = [
-  { role: 'আয়োজনে', name: 'United Muslim Ummah', sub: 'Dhaka University' },
-  { role: 'আয়োজনে', name: 'QARI', sub: 'Quranic & Arabic Research Institute' },
-  { role: 'সহযোগিতায়', name: 'Al Quran Reflection Center', sub: '' },
-  { role: 'মিডিয়া পার্টনার', name: 'Innova Studio', sub: '' },
+  {
+    tier: 'organizer',
+    name: 'United Muslim Ummah',
+    sub: 'Dhaka University',
+    logo: '/assets/partners/umu.jpg',
+    initials: 'UMU',
+  },
+  {
+    tier: 'organizer',
+    name: 'QARI',
+    sub: 'Quranic & Arabic Research Institute',
+    logo: '/assets/partners/qari.png',
+    initials: 'QARI',
+  },
+  {
+    tier: 'partner',
+    name: 'Al Quran Reflection Center',
+    sub: '',
+    logo: '/assets/partners/al-quran-reflection-center.png',
+    initials: 'AQRC',
+    logoScale: 'scale-[1.55]',
+  },
+  {
+    tier: 'media',
+    name: 'Innova Studio',
+    sub: '',
+    logo: '/assets/partners/innova-studio.png',
+    initials: 'IS',
+    logoScale: 'scale-[1.9]',
+  },
 ];
+
+const TIER_LABEL = {
+  organizer: 'আয়োজক',
+  partner: 'সহযোগিতায়',
+  media: 'মিডিয়া পার্টনার',
+};
+
+function PartnerLogo({ org, className = '' }) {
+  const [failed, setFailed] = useState(false);
+
+  return (
+    <div
+      className={`overflow-hidden rounded-xl bg-white flex items-center justify-center ${className}`}
+    >
+      {failed ? (
+        <span className="w-full h-full bg-primary text-gold-light font-extrabold flex items-center justify-center tracking-wide">
+          {org.initials}
+        </span>
+      ) : (
+        <div className={`h-full w-full ${org.logoScale ?? ''}`}>
+          <img
+            src={org.logo}
+            alt={`${org.name} logo`}
+            loading="lazy"
+            onError={() => setFailed(true)}
+            className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-110"
+          />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function OrganizerCard({ org, size }) {
+  const large = size === 'lg';
+  return (
+    <div
+      className={`group h-full bg-white rounded-2xl border border-gray-100 text-center transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:border-gold-light ${
+        large
+          ? 'p-6 md:p-8 shadow-md border-t-4 border-t-gold-light'
+          : 'p-5 md:p-6 shadow-sm'
+      }`}
+    >
+      <span className="inline-block text-xs font-semibold text-gold bg-gold-light/20 px-3 py-1 rounded-full mb-4">
+        {TIER_LABEL[org.tier]}
+      </span>
+      <PartnerLogo
+        org={org}
+        className={large ? 'h-28 w-40 mx-auto' : 'h-24 w-48 mx-auto'}
+      />
+      <p
+        className={`font-extrabold text-primary-dark mt-4 ${large ? 'text-lg md:text-xl' : 'text-base'}`}
+      >
+        {org.name}
+      </p>
+      {org.sub && <p className="text-sm text-text-muted mt-1">{org.sub}</p>}
+    </div>
+  );
+}
 
 function SectionHeading({ eyebrow, title, subtitle }) {
   return (
@@ -700,7 +785,7 @@ export default function AlQuranCompetition() {
         </div>
       </section>
 
-      {/* Prizes + Organizers */}
+      {/* Prizes */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-4xl">
           <Reveal>
@@ -745,36 +830,37 @@ export default function AlQuranCompetition() {
             })}
           </div>
 
-          <Reveal className="mt-12">
-            <p className="text-center text-sm font-semibold text-text-muted mb-4">
-              আয়োজক ও সহযোগী
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {ORGANIZERS.map((org) => (
-                <div
-                  key={org.name}
-                  className="rounded-xl border border-gray-100 bg-sky-light px-4 py-4 text-center hover:bg-white hover:shadow-md hover:border-gold-light transition-all"
-                >
-                  <p className="text-[11px] text-gold font-semibold mb-1">
-                    {org.role}
-                  </p>
-                  <p className="font-bold text-primary-dark text-sm leading-snug">
-                    {org.name}
-                  </p>
-                  {org.sub && (
-                    <p className="text-[11px] text-text-muted mt-0.5">
-                      {org.sub}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
+        </div>
+      </section>
+
+      {/* Organizers & Partners */}
+      <section className="py-12">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <Reveal>
+            <SectionHeading
+              eyebrow="আয়োজক ও সহযোগী"
+              title="যাদের উদ্যোগে এই আয়োজন"
+            />
           </Reveal>
+          <div className="grid md:grid-cols-2 gap-5">
+            {ORGANIZERS.filter((o) => o.tier === 'organizer').map((org, i) => (
+              <Reveal key={org.name} delay={i * 100} className="h-full">
+                <OrganizerCard org={org} size="lg" />
+              </Reveal>
+            ))}
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5 mt-5 md:max-w-2xl md:mx-auto">
+            {ORGANIZERS.filter((o) => o.tier !== 'organizer').map((org, i) => (
+              <Reveal key={org.name} delay={i * 100} className="h-full">
+                <OrganizerCard org={org} size="md" />
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Contact */}
-      <section className="py-12">
+      <section className="py-12 bg-white">
         <div className="container mx-auto px-4 max-w-2xl text-center">
           <Reveal>
             <SectionHeading
@@ -787,7 +873,7 @@ export default function AlQuranCompetition() {
             <div className="grid sm:grid-cols-2 gap-4">
               <a
                 href={`tel:${COMPETITION.contact.phone}`}
-                className="group bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-gold-light transition-all"
+                className="group bg-sky-light rounded-2xl p-5 border border-gray-100 hover:bg-white hover:shadow-md hover:border-gold-light transition-all"
               >
                 <span className="w-11 h-11 mx-auto rounded-full bg-primary text-white flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                   <FaPhoneAlt />
@@ -801,7 +887,7 @@ export default function AlQuranCompetition() {
               </a>
               <a
                 href={`mailto:${COMPETITION.contact.email}`}
-                className="group bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md hover:border-gold-light transition-all"
+                className="group bg-sky-light rounded-2xl p-5 border border-gray-100 hover:bg-white hover:shadow-md hover:border-gold-light transition-all"
               >
                 <span className="w-11 h-11 mx-auto rounded-full bg-primary text-white flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
                   <MdEmail className="text-lg" />
