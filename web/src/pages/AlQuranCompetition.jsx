@@ -129,17 +129,54 @@ function RegisterButton({ size = 'md', variant = 'gold', className = '' }) {
     md: 'px-6 py-3 text-base',
     lg: 'px-8 py-4 text-lg',
   };
+
   const variants = {
-    gold: 'bg-gold-light text-primary-dark hover:bg-white',
-    green: 'bg-primary text-white hover:bg-primary-dark',
+    gold: {
+      background: '#E6C77A',
+      color: '#0B4F2B',
+      border: '1px solid #E6C77A',
+      hoverBackground: '#FFFFFF',
+      hoverColor: '#0B4F2B',
+      hoverBorder: '#FFFFFF',
+    },
+    green: {
+      background: '#0B4F2B',
+      color: '#FFFFFF',
+      border: '1px solid #0B4F2B',
+      hoverBackground: '#0E5A37',
+      hoverColor: '#FFFFFF',
+      hoverBorder: '#0E5A37',
+    },
   };
+
+  const palette = variants[variant] ?? variants.gold;
 
   return (
     <a
       href={COMPETITION.formUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className={`group inline-flex items-center justify-center gap-2 rounded-full font-bold shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl ${sizes[size]} ${variants[variant]} ${className}`}
+      className={`group inline-flex items-center justify-center gap-2 rounded-full font-bold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl ${sizes[size]} ${className}`}
+      style={{
+        backgroundColor: palette.background,
+        color: palette.color,
+        border: palette.border,
+        boxShadow: '0 10px 25px rgba(11, 79, 43, 0.18)',
+        display: 'inline-flex',
+        textDecoration: 'none',
+        lineHeight: 1.2,
+        cursor: 'pointer',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.backgroundColor = palette.hoverBackground;
+        e.currentTarget.style.color = palette.hoverColor;
+        e.currentTarget.style.borderColor = palette.hoverBorder;
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.backgroundColor = palette.background;
+        e.currentTarget.style.color = palette.color;
+        e.currentTarget.style.borderColor = palette.border.replace('1px solid ', '');
+      }}
     >
       নিবন্ধন করুন
       <FaExternalLinkAlt className="text-[0.75em] transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -567,22 +604,37 @@ export default function AlQuranCompetition() {
         <div className="relative container mx-auto px-4 max-w-6xl pt-12 pb-24 md:pt-16 md:pb-32">
           <div className="grid lg:grid-cols-12 gap-10 items-center">
             <div className="lg:col-span-7 text-center lg:text-left">
-              <p className="text-gold-light/90 text-sm md:text-base mb-4">
+              <p className="text-sm md:text-base mb-4" style={{ color: '#E6C77A' }}>
                 بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
               </p>
               <StatusBadge phase={phase} className="mb-5" />
               <h1 className="font-extrabold leading-tight">
-                <span className="inline-block bg-red-700 text-white text-3xl md:text-5xl px-4 py-1 rounded-lg shadow-lg -rotate-1">
+                <span
+                  className="inline-block text-3xl md:text-5xl px-4 py-1 rounded-lg shadow-lg -rotate-1"
+                  style={{ backgroundColor: '#B91C1C', color: '#FFFFFF' }}
+                >
                   আল কুরআন
                 </span>
-                <span className="block text-gold-light text-4xl md:text-6xl mt-4 drop-shadow">
+                <span
+                  className="block text-4xl md:text-6xl mt-4 drop-shadow"
+                  style={{ color: '#E6C77A' }}
+                >
                   অর্থ পাঠ প্রতিযোগিতা
                 </span>
-                <span className="inline-block mt-4 text-xl md:text-2xl border-2 border-gold-light/70 text-gold-light rounded-full px-5 py-0.5">
+                <span
+                  className="inline-block mt-4 text-xl md:text-2xl rounded-full px-5 py-0.5"
+                  style={{
+                    border: '2px solid rgba(230, 199, 122, 0.7)',
+                    color: '#E6C77A',
+                  }}
+                >
                   ২০২৬
                 </span>
               </h1>
-              <p className="mt-6 text-white/85 leading-relaxed md:text-lg max-w-xl mx-auto lg:mx-0">
+              <p
+                className="mt-6 leading-relaxed md:text-lg max-w-xl mx-auto lg:mx-0"
+                style={{ color: '#454544' }}
+              >
                 Quranic and Arabic Research Institute (QARI) এবং United Muslim
                 Ummah (Dhaka University) এর উদ্যোগে আয়োজিত হতে যাচ্ছে, ইন শা'
                 আল্লাহ।
@@ -592,7 +644,24 @@ export default function AlQuranCompetition() {
                 <button
                   type="button"
                   onClick={scrollToRules}
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold border-2 border-white/70 text-white hover:bg-white hover:text-primary-dark transition-all"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-full font-bold transition-all shadow-md"
+                  style={{
+                    border: '2px solid rgba(230, 199, 122, 0.9)',
+                    color: '#F8F1D6',
+                    backgroundColor: 'transparent',
+                    boxShadow: '0 10px 25px rgba(11, 79, 43, 0.18)',
+                    cursor: 'pointer',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F8F1D6';
+                    e.currentTarget.style.color = '#0B4F2B';
+                    e.currentTarget.style.borderColor = '#F8F1D6';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = '#F8F1D6';
+                    e.currentTarget.style.borderColor = 'rgba(230, 199, 122, 0.9)';
+                  }}
                 >
                   নিয়মাবলী দেখুন
                   <FaChevronDown className="text-sm" />
