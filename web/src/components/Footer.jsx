@@ -52,6 +52,14 @@ function Footer() {
                   Gallery
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/al-quran-competition"
+                  className="hover:text-gold transition-colors"
+                >
+                  Al Quran Competition
+                </Link>
+              </li>
             </ul>
           </div>
 

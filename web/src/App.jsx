@@ -13,6 +13,7 @@ import EventsPage from './components/EventsPage';
 import NewsPage from './components/NewsPage';
 import GalleryPage from './components/GalleryPage';
 import NotFound from './components/NotFound';
+import AlQuranCompetition from './pages/AlQuranCompetition';
 
 const LayoutWithNav = ({ children }) => {
   const [modalState, setModalState] = useState({
@@ -85,6 +86,14 @@ const App = () => {
           element={
             <LayoutWithNav>
               {() => <GalleryPage />}
+            </LayoutWithNav>
+          }
+        />
+        <Route
+          path="/al-quran-competition"
+          element={
+            <LayoutWithNav>
+              {() => <AlQuranCompetition />}
             </LayoutWithNav>
           }
         />

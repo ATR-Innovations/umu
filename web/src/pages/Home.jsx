@@ -1,4 +1,5 @@
 import Hero from "../components/Hero";
+import CompetitionBanner from "../components/CompetitionBanner";
 import StatsCounter from "../components/StatsCounter";
 import MissionSection from "../components/MissionSection";
 import LatestEventSection from "../components/LatestEventSection";
@@ -17,6 +18,7 @@ const Home = ({ onOpenModal }) => {
     <div>
       <Hero onScroll={handleScroll} />
       <StatsCounter />
+      <CompetitionBanner />
       <MissionSection />
       <LatestEventSection onOpenModal={onOpenModal} />
       <GalleryCarouselSection />
