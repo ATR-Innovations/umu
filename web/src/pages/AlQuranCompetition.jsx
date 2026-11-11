@@ -633,7 +633,7 @@ export default function AlQuranCompetition() {
               </h1>
               <p
                 className="mt-6 leading-relaxed md:text-lg max-w-xl mx-auto lg:mx-0"
-                style={{ color: '#454544' }}
+                style={{ color: '#f6f6f6' }}
               >
                 Quranic and Arabic Research Institute (QARI) এবং United Muslim
                 Ummah (Dhaka University) এর উদ্যোগে আয়োজিত হতে যাচ্ছে, ইন শা'
