@@ -52,8 +52,17 @@ const App = () => {
     <Router>
       <Routes>
         {/* Public Routes */}
-        <Route
+         <Route
+          // path="/al-quran-competition"
           path="/"
+          element={
+            <LayoutWithNav>
+              {() => <AlQuranCompetition />}
+            </LayoutWithNav>
+          }
+        />
+        <Route
+          path="/home"
           element={<LayoutWithNav>{(props) => <Home {...props} />}</LayoutWithNav>}
         />
         <Route path="/login" element={<Login />} />
@@ -89,14 +98,14 @@ const App = () => {
             </LayoutWithNav>
           }
         />
-        <Route
+        {/* <Route
           path="/al-quran-competition"
           element={
             <LayoutWithNav>
               {() => <AlQuranCompetition />}
             </LayoutWithNav>
           }
-        />
+        /> */}
 
         {/* Protected Routes */}
         <Route path="/dashboard" element={<Dashboard />} />

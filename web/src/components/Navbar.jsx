@@ -9,14 +9,15 @@ export default function Navbar() {
   const location = useLocation();
 
   const navLinks = [
-    { label: 'Home', path: '/' },
+    { label: 'Home', path: '/home' },
     { label: 'About', path: '/about' },
     { label: 'Events', path: '/events' },
     { label: 'News Portal', path: '/news' },
     { label: 'Gallery', path: '/gallery' },
     {
       label: 'Al Quran Competition',
-      path: '/al-quran-competition',
+      // path: '/al-quran-competition',
+      path: '/',
       highlight: true,
     },
   ];

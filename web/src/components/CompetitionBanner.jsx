@@ -20,7 +20,8 @@ export default function CompetitionBanner() {
           </div>
         </div>
         <Link
-          to="/al-quran-competition"
+          //to="/al-quran-competition"
+          to="/"
           className="shrink-0 bg-gold-light text-primary-dark px-6 py-3 rounded-full font-bold text-sm hover:bg-white transition-all shadow-md hover:-translate-y-0.5"
         >
           বিস্তারিত ও নিবন্ধন

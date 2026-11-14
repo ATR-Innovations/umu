@@ -28,7 +28,7 @@ function Footer() {
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link to="/" className="hover:text-gold transition-colors">
+                <Link to="/home" className="hover:text-gold transition-colors">
                   Home
                 </Link>
               </li>
@@ -54,7 +54,8 @@ function Footer() {
               </li>
               <li>
                 <Link
-                  to="/al-quran-competition"
+                  // to="/al-quran-competition"
+                  to="/"
                   className="hover:text-gold transition-colors"
                 >
                   Al Quran Competition
